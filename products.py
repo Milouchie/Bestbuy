@@ -110,38 +110,105 @@ class Product:
 
 class Promotion(ABC):
     def __init__(self, name):
+        """
+         Initialize a Promotion instance with the given name.
+
+         Args:
+             name (str): The name of the promotion.
+         """
         self.name = name
 
     @abstractmethod
     def apply_promotion(self, product, quantity):
+        """
+        Apply the promotion to a product with a given quantity.
+
+        This method should be implemented by subclasses.
+
+        Args:
+            product (Product): The product to apply the promotion to.
+            quantity (int): The quantity of the product.
+
+        Returns:
+            float: The total price after applying the promotion.
+        """
         pass
+
 
 class SecondHalfPrice(Promotion):
     def __init__(self, name):
+        """
+        Initialize a SecondHalfPrice instance with the given name.
+
+        Args:
+            name (str): The name of the promotion.
+        """
         super().__init__(name)
 
     def apply_promotion(self, product, quantity):
+        """
+        Apply the second half price promotion to the product.
+
+        Args:
+            product (Product): The product to apply the promotion to.
+            quantity (int): The quantity of the product.
+
+        Returns:
+            float: The total price after applying the promotion.
+        """
         num_full_price_items = quantity // 2
         num_discounted_items = quantity - num_full_price_items
         total_price = (num_full_price_items * product.price) + (num_discounted_items * (product.price / 2))
         return total_price
 
 
-
 class ThirdOneFree(Promotion):
     def __init__(self, name):
+        """
+        Initialize a ThirdOneFree instance with the given name.
+
+        Args:
+            name (str): The name of the promotion.
+        """
         super().__init__(name)
 
     def apply_promotion(self, product, quantity):
+        """
+        Apply the "buy two, get one free" promotion to the product.
+
+        Args:
+            product (Product): The product to apply the promotion to.
+            quantity (int): The quantity of the product.
+
+        Returns:
+            float: The total price after applying the promotion.
+        """
         return (quantity // 3 * 2 + quantity % 3) * product.price
 
 
 class PercentDiscount(Promotion):
     def __init__(self, name, percent):
+        """
+        Initialize a PercentDiscount instance with the given name and percentage.
+
+        Args:
+            name (str): The name of the promotion.
+            percent (float): The percentage discount.
+        """
         super().__init__(name)
         self.percent = percent
 
     def apply_promotion(self, product, quantity):
+        """
+        Apply the percentage discount promotion to the product.
+
+        Args:
+            product (Product): The product to apply the promotion to.
+            quantity (int): The quantity of the product.
+
+        Returns:
+            float: The total price after applying the promotion.
+        """
         return product.price * quantity * (1 - self.percent / 100)
 
 
@@ -167,6 +234,16 @@ class NonStockedProduct(Product):
 
 class LimitedProduct(Product):
     def __init__(self, name, price, quantity, max_quantity, promotion=None):
+        """
+        Initialize a LimitedProduct instance with the given name, price, quantity, maximum quantity, and promotion.
+
+        Args:
+            name (str): The name of the product.
+            price (float): The price of the product.
+            quantity (int): The quantity of the product.
+            max_quantity (int): The maximum allowed quantity of the product.
+            promotion (Promotion, optional): The promotion for the product. Defaults to None.
+        """
         super().__init__(name, price, quantity)
         self.max_quantity = max_quantity
         self.promotion = promotion
